@@ -36,12 +36,8 @@ public class DBMethoden {
 
         try {
             Statement stm = con.createStatement();
-
             stm.executeUpdate(SQLInsert);
-
             System.out.println("Produkt " + bezeichnung + " wurde zur Tabelle zugefügt.");
-
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -51,7 +47,9 @@ public class DBMethoden {
         System.out.println();
         System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         System.out.println();
+
         String query = "SELECT * FROM Produkte";
+        String queryAvgPreis = "SELECT AVG(Nettopreis) FROM Produkte";
 
         try {
             Statement stm = con.createStatement();
@@ -65,7 +63,7 @@ public class DBMethoden {
             System.out.println();
             System.out.println("-------------------------------------------------");
 
-            //Ausgabe des resultsets (=der in der Tabelle enthaltenen Daten)
+            //Ausgabe des resultsets (=die in der Tabelle enthaltenen Daten)
             Double gesamtpreis = 0.0;
             int counter = 0;
             while (rs.next()){
@@ -80,10 +78,18 @@ public class DBMethoden {
                 System.out.println();
             }
 
-            //Ausgabe des Durschnittspreises
+            //Ausgabe des Durschnittspreises mit Rechnung
             Double averagePreis = gesamtpreis/counter;
             System.out.println();
             System.out.println("Durchschnittspreis der Produkte: " + averagePreis + "€");
+
+            //Ausgabe Durschnittspreis mit Query
+            Statement stm2 = con.createStatement();
+            ResultSet rs2 = stm2.executeQuery(queryAvgPreis);
+            while (rs2.next()){
+                double avgPreis = rs2.getDouble(1);
+                System.out.println("Durchschnittspreis der Produkte: " + avgPreis + "€");
+            }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
